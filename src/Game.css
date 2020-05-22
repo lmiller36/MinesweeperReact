@@ -1,0 +1,4 @@
+.gameWrapper {
+    display: inline-grid;
+    grid-template-columns: repeat(10,1fr);
+}

@@ -1,0 +1,11 @@
+.App-Wrapper {
+    margin: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #222222;
+    width:100%;
+    margin: 0 auto;
+}
+.App {
+    display: table;
+    margin: 0 auto;
+}
