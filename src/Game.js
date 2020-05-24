@@ -1,7 +1,7 @@
 import React from 'react';
 import './Game.css';
 import Tile from './Minesweeper/Tile';
-import Bomb from './Bomb';
+import Bomb from './Minesweeper/Bomb';
 import { connect } from 'react-redux';
 import displayAlert from './thunks';
 import {
@@ -36,7 +36,7 @@ const Game = ({ performInitialSetup, removeCachedBoard, board, isSet }) => {
                     board.board.map((tile) => {
                         if (isBomb(tile))
                             return <Bomb />
-                        return <Tile />
+                        return <Tile tile={tile} />
                     }) :
                     emptyBoard.board.map((item) => {
                         return <Tile tile={item} performInitialSetup={performInitialSetup} />
