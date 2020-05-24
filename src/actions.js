@@ -1,6 +1,6 @@
-export const INITIAL_CLICK = 'INITIAL_CLICK';
-export const initialClicky = (index) => ({
-    type: INITIAL_CLICK,
+export const INITIALIZE_BOARD = 'INITIALIZE_BOARD';
+export const initializeBoard = (index) => ({
+    type: INITIALIZE_BOARD,
     payload: { index },
 });
 
