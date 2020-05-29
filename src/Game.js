@@ -1,7 +1,6 @@
 import React from 'react';
 // import './Game.css';
 import Tile from './Minesweeper/Tile';
-import Bomb from './Minesweeper/Bomb';
 import { connect } from 'react-redux';
 import displayAlert from './thunks';
 import styled from 'styled-components';
@@ -31,45 +30,58 @@ const GameWrapper = styled.div`
 `;
 
 const Game = ({ performInitialSetup, clickTile, removeCachedBoard, board, game, isSet, rerender, setStartTime, updateTimer }) => {
+
+    var visibleBoard = isSet ? board : emptyBoard.board;
+
+    const initialTileClick = (tile) => {
+        stop = false;
+        performInitialSetup(tile);
+        var timerInterval;
+        timerInterval = setInterval(() => {
+            updateTimer(new Date());
+            if (stop) clearInterval(timerInterval);
+        }, 1000);
+
+        setStartTime(new Date(), timerInterval);
+    };
+
+    const bombClick = (tile) => {
+        alert("LOSS!");
+    };
+
+    const unopenedTileClick = (tile) => {
+        game.clickTile(tile);
+        clickTile(game.board);
+    };
+
+
+    var clickFunction = initialTileClick;
+
     return <div>
         <Timer />
         <button onClick={() => {
             removeCachedBoard();
             stop = true;
-            // console.log("here");
         }}>remove cachced</button>
         <GameWrapper>
             {
-                isSet ?
-                    board.map((tile) => {
-                        if (isBomb(tile))
-                            return <Bomb click={
-                                (tile) => {
-                                    // game.clickTile(tile);
-                                    alert("loss!")
-                                    // clickTile(game.board);
-                                }} />
-                        return <Tile tile={tile} click={
-                            (tile) => {
-                                game.clickTile(tile);
-                                clickTile(game.board);
-                            }} />
-                    }) :
-                    emptyBoard.board.map((item) => {
-                        return <Tile tile={item} click={(tile) => {
-                            stop = false;
-                            performInitialSetup(tile);
-                            var timerInterval;
-                            timerInterval = setInterval(() => {
-                                updateTimer(new Date());
-                                // console.log(stop);
-                                if (stop) clearInterval(timerInterval);
-                            }, 1000);
+                visibleBoard.map((tile) => {
+                    return <Tile tile={tile} click={
+                        (tile) => {
+                            if (!isSet) {
+                                initialTileClick(tile);
+                                return;
+                            }
 
-                            setStartTime(new Date(), timerInterval);
+                            if (isBomb(tile)) {
+                                bombClick(tile);
+                                return;
+                            }
 
-                        }} />
-                    })
+                            unopenedTileClick(tile);
+                        }
+                    } />
+                })
             }
         </GameWrapper>
     </div>
