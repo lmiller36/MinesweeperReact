@@ -18,10 +18,10 @@ const persistor = persistStore(store);
 
 ReactDOM.render(
     <Provider store={store}>
-        {/* <PersistGate
+        <PersistGate
             loading={<div>Loading...</div>}
-            persistor={persistor}> */}
+            persistor={persistor}>
             <App />
-        {/* </PersistGate> */}
+        </PersistGate>
     </Provider>,
     document.getElementById('root'));

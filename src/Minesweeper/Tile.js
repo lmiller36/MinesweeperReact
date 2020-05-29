@@ -57,28 +57,29 @@ function getUrl(neighbors) {
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Minesweeper_7.svg/2000px-Minesweeper_7.svg.png";
         case 8:
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Minesweeper_8.svg/2000px-Minesweeper_8.svg.png";
+        case "bomb":
+            return "https://apprecs.org/ios/images/app-icons/256/e7/451931111.jpg";
+        case "flagged":
+            return "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Minesweeper_flag.svg/2000px-Minesweeper_flag.svg.png";
         default:
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Minesweeper_unopened_square.svg/1024px-Minesweeper_unopened_square.svg.png";
     }
 }
 
-const Tile = ({ tile, performInitialSetup }) => {
+const Tile = ({ tile, click }) => {
     // console.log(tile);
-    return <OpenedTile
+    return tile.isOpened ? <OpenedTile
         neighbors={tile.numBombs}
         onClick={() => {
-            if (performInitialSetup) performInitialSetup(tile.index)
-        }}>
-    </OpenedTile>;
+            click(tile);
+        }}
+    >
+    </OpenedTile>
+        :
+        <UnopenedTile onClick={() => {
+            click(tile);
+            // alert("rip")
+        }}></UnopenedTile>;
 };
-
-// const EmptyTile = ({ tile }) => {
-//     return <div className="unopened"
-//         onClick={() => {
-//             if (performInitialSetup) performInitialSetup(tile.index)
-//         }}>
-//     </div>
-// };
-
 
 export default Tile;
