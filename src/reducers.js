@@ -76,6 +76,8 @@ export const data = (state = initialState, action) => {
         }
         case TOGGLE_GAME_MODE: {
             const newMode = state.gameMode === "clicking" ? "flagging" : "clicking";
+
+            console.log("toggle")
             return {
                 ...state,
                 gameMode: newMode,

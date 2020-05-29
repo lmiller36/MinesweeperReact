@@ -15,17 +15,18 @@ export const safeTile = {
     "type": "safe"
 };
 
-//     safeTile.index = index;
-
-//     return safeTile
-// }
-
 export function isBomb(tile) {
     return tile.type === "bomb";
 }
 
 const UnopenedTile = styled.div`
     content: url("https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Minesweeper_unopened_square.svg/1024px-Minesweeper_unopened_square.svg.png");
+    width: 50px;
+    height: 50px;
+`;
+
+const FlaggedTile = styled.div`
+    content: url(${props => (getUrl("flagged"))});
     width: 50px;
     height: 50px;
 `;
@@ -67,7 +68,6 @@ function getUrl(neighbors) {
 }
 
 const Tile = ({ tile, click }) => {
-    // console.log(tile);
     return tile.isOpened ? <OpenedTile
         neighbors={tile.numBombs}
         onClick={() => {
@@ -76,10 +76,15 @@ const Tile = ({ tile, click }) => {
     >
     </OpenedTile>
         :
-        <UnopenedTile onClick={() => {
-            click(tile);
-            // alert("rip")
-        }}></UnopenedTile>;
+        tile.isFlagged ? <FlaggedTile onClick={
+            () => {
+                click(tile);
+            }
+        } /> :
+            <UnopenedTile onClick={() => {
+                click(tile);
+                // alert("rip")
+            }}></UnopenedTile>;
 };
 
 export default Tile;

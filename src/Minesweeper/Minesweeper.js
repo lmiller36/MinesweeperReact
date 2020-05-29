@@ -108,14 +108,10 @@ class MinesweeperGame {
     }
 
     numEdgesOfPos(pos, rows, cols) {
-        // console.log(pos)
-        // console.log(rows + " " + cols);
         const left = pos.y === 0;
         const right = pos.y === cols - 1;
         const top = pos.x === 0;
         const bottom = pos.x === rows - 1;
-
-        // console.log(left + " " + right + " " + top + " " + bottom);
 
         let total = 0;
         if (left || right) total++;
@@ -152,6 +148,12 @@ class MinesweeperGame {
         // console.log(this.board[tileToOpen.index])
     }
 
+    flagTile(tile) {
+        var curr = this.board[tile.index];
+        var flaggedState = curr.isFlagged;
+        curr.isFlagged = !flaggedState;
+    }
+
     openNonBombNeighbors(tileToOpen) {
         var pos = this.indexToPos(tileToOpen.index, this.cols);
         // console.log(tileToOpen.index);
@@ -173,29 +175,7 @@ class MinesweeperGame {
         }
     }
 
-
-
-    // // creates an empty board
-    // constructor(rows,cols){
-    //    this.board = genNonBombs(rows * cols, true);
-    // }
 }
-
-// const rows = 10;
-// const cols = 10;
-// const numBombs = 10;
-
-// export function genNonBombs(numTiles, includeIndex) {
-//     const tiles = [];
-
-
-//     for (var i = 0; i < numTiles; i++) {
-//         tiles.push(safeTile(includeIndex ? i : null));
-//     }
-
-//     return tiles;
-// }
-
 
 function genNonBombs(numTiles, includeIndex, toInsert) {
     const tiles = [];

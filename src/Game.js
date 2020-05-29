@@ -33,12 +33,32 @@ const GameWrapper = styled.div`
 `;
 
 const ModeWrapper = styled.div`
-
+    // border:2px solid black;
+    // display:inline;
 `;
 
-const Game = ({ performInitialSetup, clickTile, removeCachedBoard, board, game, isSet, rerender, setStartTime, updateTimer, gameMode,toggleGameMode }) => {
+function handleKeyPress(event) {
+    console.log(event)
+    if (event.key === 'Enter') {
+        console.log('enter press here! ')
+    }
+}
 
+let first = true;
+
+
+const Game = ({ performInitialSetup, updateBoard, removeCachedBoard, board, game, isSet, rerender, setStartTime, updateTimer, gameMode, toggleGameMode }) => {
+
+    if (first && isSet) {
+        window.addEventListener("keydown", (event) => {
+            if (event.key === "F" || event.key === "f") {
+                toggleGameMode();
+            }
+        }, false);
+        first = false;
+    }
     var visibleBoard = isSet ? board : emptyBoard.board;
+
 
     const initialTileClick = (tile) => {
         stop = false;
@@ -58,18 +78,26 @@ const Game = ({ performInitialSetup, clickTile, removeCachedBoard, board, game, 
 
     const unopenedTileClick = (tile) => {
         game.clickTile(tile);
-        clickTile(game.board);
+        updateBoard(game.board);
+    };
+
+    const flagClick = (tile) => {
+        game.flagTile(tile);
+        updateBoard(game.board);
     };
 
 
+
     var clickFunction = initialTileClick;
+
+    console.log(gameMode);
 
     return <div>
         <Timer />
         <ModeWrapper >
             <FontAwesomeIcon
-                size="10x"
-                icon={gameMode === "flag" ? faFlag : faMousePointer}
+                size="2x"
+                icon={gameMode === "flagging" ? faFlag : faMousePointer}
                 onClick={
                     () => {
                         toggleGameMode();
@@ -97,6 +125,11 @@ const Game = ({ performInitialSetup, clickTile, removeCachedBoard, board, game, 
                                 return;
                             }
 
+                            if (gameMode === "flagging") {
+                                flagClick(tile);
+                                return;
+                            }
+
                             if (isBomb(tile)) {
                                 bombClick(tile);
                                 return;
@@ -108,7 +141,7 @@ const Game = ({ performInitialSetup, clickTile, removeCachedBoard, board, game, 
                 })
             }
         </GameWrapper>
-    </div>
+    </div >
 
 
 };
@@ -123,7 +156,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     performInitialSetup: (tile) => dispatch(initializeBoard(new MinesweeperGame(rows, cols, numBombs, tile.index))),
-    clickTile: (tile) => dispatch(updateBoard(tile)),
+    updateBoard: (tile) => dispatch(updateBoard(tile)),
     removeCachedBoard: () => dispatch(removeCachedBoard()),
     setStartTime: (startTime, interval) => dispatch(initializeTimer(startTime, interval)),
     updateTimer: (now) => dispatch(updateTimer(now)),
