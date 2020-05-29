@@ -29,6 +29,12 @@ export const updateTimer = (now) => ({
     payload: {now},
 });
 
+export const TOGGLE_GAME_MODE = 'TOGGLE_GAME_MODE';
+export const toggleGameMode = (now) => ({
+    type: TOGGLE_GAME_MODE,
+    payload: {now},
+});
+
 
 
 

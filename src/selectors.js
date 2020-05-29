@@ -25,6 +25,10 @@ export const getCurrentTime = state => {
     return state.data.now;
 }
 
+export const getGameMode = state => {
+    return state.data.gameMode;
+}
+
 
 // export const getIncompleteTodos = createSelector(
 //     getTodos,

@@ -3,109 +3,85 @@ import {
     REMOVE_CACHED_BOARD,
     UPDATE_BOARD,
     INITILIZE_TIMER,
-    UPDATE_TIMER
+    UPDATE_TIMER,
+    TOGGLE_GAME_MODE,
 } from './actions';
 
 const initialState = { game: { board: [], isSet: false } };
 
 export const data = (state = initialState, action) => {
     const { type, payload } = action;
-    // console.log(type);
-    // console.log(payload);
 
     switch (type) {
         case INITIALIZE_BOARD: {
             const { game } = payload;
-            state.game = payload.game;
-            state.board = payload.game.board;
+            const board = game.board;
 
-            // console.log(payload.game)
-            // console.log(game)
-
-            // console.log(state);
-
-            state.isSet = true;
-            state.update = 0;
-            state.shouldRerender = 0;
-            state.now = null;
-            state.startTime = null;
-            // clearInterval(state.timerInterval);
-            state.timerInterval = null;
-
-
-            return state;
+            return {
+                ...state,
+                game: game,
+                board: board,
+                isSet: true,
+                update: 0,
+                shouldRerender: 0,
+                now: null,
+                startTime: null,
+                gameMode: "clicking",
+                timerInterval: null,
+            };
         }
 
         case UPDATE_BOARD: {
             const { game } = payload;
-            // console.log(state);
-            // console.log(payload)
-
-            // game.board.push([]);
-
-            // state.game = game;
-            // state.board = game.board;
-
-            // state.update += 1;
-            // console.log(state.shouldRerender);
-            state.shouldRerender = state.shouldRerender + 1;
-            // console.log(game.game.board);
-            // state.game = game;
-            // state = 
-
+          
             return {
-                startTime: state.startTime,
-                now: state.now,
+                ...state,
+                shouldRerender: state.shouldRerender + 1,
                 board: game,
-                game: state.game,
-                isSet: state.isSet,
-                shouldRerender: state.shouldRerender ,
             }
-
-
         }
 
         case INITILIZE_TIMER: {
             const { startTime, timerInterval } = payload;
-            // console.log(payload);
-
-            state.now = startTime;
-            state.startTime = startTime;
-            state.timerInterval = timerInterval;
-
-            // clearInterval(timerInterval);
-
 
             return {
                 ...state,
+                now: startTime,
+                startTime: startTime,
+                timerInterval: timerInterval,
             }
         }
 
         case UPDATE_TIMER: {
             const { now } = payload;
-            state.now = now;
-            // console.log(state);
 
             return {
                 ...state,
+                now: now,
             };
         }
 
         case REMOVE_CACHED_BOARD: {
-            // console.log(state);
-            state.game.board = [];
-            state.isSet = false;
-            state.now = null;
-            state.startTime = null;
-            // clearInterval(state.timerInterval);
-            state.timerInterval = null;
 
             return {
                 ...state,
+                timerInterval: null,
+                now: null,
+                isSet: false,
+                startTime: null,
+                game: {
+                    board: []
+                }
             };
         }
+        case TOGGLE_GAME_MODE: {
+            const newMode = state.gameMode === "clicking" ? "flagging" : "clicking";
+            return {
+                ...state,
+                gameMode: newMode,
+            }
+        }
         default: {
-            // console.log("DeFAULT");
             return state;
         }
     }

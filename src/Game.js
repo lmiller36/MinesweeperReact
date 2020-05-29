@@ -1,5 +1,7 @@
 import React from 'react';
 // import './Game.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faMousePointer, faFlag } from '@fortawesome/free-solid-svg-icons'
 import Tile from './Minesweeper/Tile';
 import { connect } from 'react-redux';
 import displayAlert from './thunks';
@@ -10,9 +12,10 @@ import {
     getIsSet,
     getGame,
     plsRerender,
+    getGameMode,
 
 } from './selectors';
-import { initializeBoard, updateBoard, removeCachedBoard, initializeTimer, updateTimer } from './actions';
+import { initializeBoard, updateBoard, removeCachedBoard, initializeTimer, updateTimer, toggleGameMode } from './actions';
 
 import MinesweeperGame, { genNonBombs } from './Minesweeper/Minesweeper';
 import { isBomb } from './Minesweeper/Tile';
@@ -29,7 +32,11 @@ const GameWrapper = styled.div`
     grid-template-columns: repeat(10,1fr);
 `;
 
-const Game = ({ performInitialSetup, clickTile, removeCachedBoard, board, game, isSet, rerender, setStartTime, updateTimer }) => {
+const ModeWrapper = styled.div`
+
+`;
+
+const Game = ({ performInitialSetup, clickTile, removeCachedBoard, board, game, isSet, rerender, setStartTime, updateTimer, gameMode,toggleGameMode }) => {
 
     var visibleBoard = isSet ? board : emptyBoard.board;
 
@@ -59,6 +66,23 @@ const Game = ({ performInitialSetup, clickTile, removeCachedBoard, board, game, 
 
     return <div>
         <Timer />
+        <ModeWrapper >
+            <FontAwesomeIcon
+                size="10x"
+                icon={gameMode === "flag" ? faFlag : faMousePointer}
+                onClick={
+                    () => {
+                        toggleGameMode();
+                    }
+                }
+            />
+            {/* return <FontAwesomeIcon icon={faFlag} /> :
+                return             <FontAwesomeIcon icon={faMousePointer} /> */}
+
+
+        </ModeWrapper>
+
+
         <button onClick={() => {
             removeCachedBoard();
             stop = true;
@@ -94,6 +118,7 @@ const mapStateToProps = state => ({
     isSet: getIsSet(state),
     game: getGame(state),
     rerender: plsRerender(state),
+    gameMode: getGameMode(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -102,6 +127,7 @@ const mapDispatchToProps = dispatch => ({
     removeCachedBoard: () => dispatch(removeCachedBoard()),
     setStartTime: (startTime, interval) => dispatch(initializeTimer(startTime, interval)),
     updateTimer: (now) => dispatch(updateTimer(now)),
+    toggleGameMode: () => dispatch(toggleGameMode()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);  
