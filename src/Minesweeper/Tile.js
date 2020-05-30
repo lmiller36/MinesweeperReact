@@ -40,6 +40,8 @@ const OpenedTile = styled.div`
 //"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Minesweeper_2.svg/2000px-Minesweeper_2.svg.png"
 function getUrl(neighbors) {
     switch (neighbors) {
+        case "bomb":
+            return "https://apprecs.org/ios/images/app-icons/256/e7/451931111.jpg";
         case 0:
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Minesweeper_0.svg/2000px-Minesweeper_0.svg.png";
         case 1:
@@ -58,8 +60,6 @@ function getUrl(neighbors) {
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Minesweeper_7.svg/2000px-Minesweeper_7.svg.png";
         case 8:
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Minesweeper_8.svg/2000px-Minesweeper_8.svg.png";
-        case "bomb":
-            return "https://apprecs.org/ios/images/app-icons/256/e7/451931111.jpg";
         case "flagged":
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Minesweeper_flag.svg/2000px-Minesweeper_flag.svg.png";
         default:

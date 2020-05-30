@@ -214,6 +214,10 @@ class MinesweeperGame {
     }
 
     openNonBombNeighbors(tileToOpen) {
+        if (tileToOpen.type === "bomb") {
+            alert("loss!");
+            return;
+        }
         var pos = this.indexToPos(tileToOpen.index, this.cols);
         // console.log(tileToOpen.index);
         if (tileToOpen.isOpened) return;
