@@ -1,7 +1,7 @@
 import React from 'react';
 // import './Game.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMousePointer, faFlag } from '@fortawesome/free-solid-svg-icons'
+import { faMousePointer, faFlag, faCog, faTimes, faRedo } from '@fortawesome/free-solid-svg-icons'
 import Tile from './Minesweeper/Tile';
 import { connect } from 'react-redux';
 import displayAlert from './thunks';
@@ -19,22 +19,41 @@ import { initializeBoard, updateBoard, removeCachedBoard, initializeTimer, updat
 
 import MinesweeperGame, { genNonBombs } from './Minesweeper/Minesweeper';
 import { isBomb } from './Minesweeper/Tile';
+import './Game.css';
 
-const rows = 30;
-const cols = 16;
-const numBombs = 99;
+let rows = 9;
+let cols = 9;
+let numBombs = 10;
 let stop = false;
 
-let emptyBoard = new MinesweeperGame(rows, cols, 0, null);
+let emptyBoard = null;
 
-const GameWrapper = styled.div`
-    display: inline-grid;
-    grid-template-columns: repeat(${cols},1fr);
-`;
+
 
 const ModeWrapper = styled.div`
     // border:2px solid black;
     // display:inline;
+`;
+
+const RemainingBombs = styled.div`
+`;
+
+const Header = styled.div`
+    display:flex;
+    margin:15px;
+    justify-content: space-around;
+`;
+
+const Settings = styled.div`
+`;
+
+const SettingsDropDown = styled.div`
+    // display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
 `;
 
 function handleKeyPress(event) {
@@ -48,6 +67,15 @@ let first = true;
 
 
 const Game = ({ performInitialSetup, updateBoard, removeCachedBoard, board, game, isSet, rerender, setStartTime, updateTimer, gameMode, toggleGameMode }) => {
+
+    console.log(cols);
+
+    const GameWrapper = styled.div`
+        display: inline-grid;
+        grid-template-columns: repeat(${cols},1fr);
+    `;
+
+    emptyBoard = new MinesweeperGame(rows, cols, 0, null);
 
     if (first && isSet) {
         window.addEventListener("keydown", (event) => {
@@ -100,31 +128,114 @@ const Game = ({ performInitialSetup, updateBoard, removeCachedBoard, board, game
 
     var clickFunction = initialTileClick;
 
-    console.log(gameMode);
-
     return <div>
-        <Timer />
-        <ModeWrapper >
-            <FontAwesomeIcon
-                size="2x"
-                icon={gameMode === "flagging" ? faFlag : faMousePointer}
-                onClick={
-                    () => {
-                        toggleGameMode();
+        <Header>
+            <Timer />
+            <RemainingBombs>{game.remaining}</RemainingBombs>
+
+            <ModeWrapper >
+                <FontAwesomeIcon
+                    size="2x"
+                    icon={gameMode === "flagging" ? faFlag : faMousePointer}
+                    onClick={
+                        () => {
+                            toggleGameMode();
+                        }
+                    }
+                />
+            </ModeWrapper>
+            <div className="dropdown">
+                <FontAwesomeIcon
+                    onClick={() => {
+                        const curr = document.getElementById("dropdown-menu").style.display;
+                        document.getElementById("dropdown-menu").style.display = curr == "block" ? "none" : "block";
+                        // "block";
+                    }}
+                    className="dropdown"
+                    icon={faCog}
+                    size="2x"
+                />
+                {/* <button class="dropbtn">Dropdown</button> */}
+                <div id="dropdown-menu" className="dropdown-content">
+                    <FontAwesomeIcon icon={faTimes} style={{ position: "absolute", right: "5" }} onClick={() => { document.getElementById("dropdown-menu").style.display = "none"; }} />
+                    <div>
+                        <p>Game Difficulty:</p>
+                        <div>
+                            <input type="radio" id="easy" name="gameDifficulty" value="easy" onClick={() => {
+                                rows = 9;
+                                cols = 9;
+                                numBombs = 10;
+                            }} />
+                            <label for="easy">Easy (9 x 9, 10 mines) </label>
+                        </div>
+                        <div>
+                            <input type="radio" id="medium" name="gameDifficulty" value="medium" onClick={() => {
+                                rows = 16;
+                                cols = 16;
+                                numBombs = 40;
+                            }} />
+                            <label for="medium">Medium (16 x 16, 40 mines)</label>
+                        </div>
+                        <div>
+                            <input type="radio" id="hard" name="gameDifficulty" value="hard" onClick={() => {
+                                rows = 30;
+                                cols = 16;
+                                numBombs = 99;
+                            }} />
+                            <label for="hard">Hard (16 x 30, 99 mines)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* <Settings>
+                <FontAwesomeIcon icon={faCog} size="2x" />
+                <SettingsDropDown>
+                    <a href="#">Link 1</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+                </SettingsDropDown>
+            </Settings> */}
+            <FontAwesomeIcon size="2x" icon={faRedo} onClick={() => {
+                removeCachedBoard();
+                const rbs = document.querySelectorAll('input[name="gameDifficulty"]');
+                let selectedValue;
+                for (const rb of rbs) {
+                    if (rb.checked) {
+                        selectedValue = rb.value;
+                        break;
                     }
                 }
-            />
-            {/* return <FontAwesomeIcon icon={faFlag} /> :
-                return             <FontAwesomeIcon icon={faMousePointer} /> */}
 
+                switch (selectedValue) {
+                    case "easy": {
+                        rows = 9;
+                        cols = 9;
+                        numBombs = 10;
+                        break;
+                    }
+                    case "medium": {
+                        rows = 16;
+                        cols = 16;
+                        numBombs = 40;
+                        break;
+                    }
+                    case "hard": {
+                        rows = 30;
+                        cols = 16;
+                        numBombs = 99;
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
 
-        </ModeWrapper>
+                console.log(rows + " " + cols + " " + numBombs);
 
-
-        <button onClick={() => {
-            removeCachedBoard();
-            stop = true;
-        }}>remove cachced</button>
+                // console.log(document.getElementsByTagName('input'))
+                stop = true;
+            }}/>
+        </Header>
         <GameWrapper>
             {
                 visibleBoard.map((tile) => {

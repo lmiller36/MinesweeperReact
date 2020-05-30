@@ -3,9 +3,13 @@ import { bombTile, safeTile, isBomb } from './Tile';
 
 class MinesweeperGame {
     constructor(rows, cols, bombs, initialClick) {
+        console.log(`rows:${rows} cols:${cols}`);
         this.rows = rows;
         this.cols = cols;
         this.bombs = bombs;
+        this.nonBombs = rows * cols - bombs;
+        this.remaining = rows * cols - bombs;
+        this.opened = new Set();
         if (this.bombs === 0)
             this.board = this.createEmptyBoard(rows, cols);
         else {
@@ -181,7 +185,9 @@ class MinesweeperGame {
         var numFlagged = this.neighborsWithFlags(tileToOpen);
         var pos = this.indexToPos(tileToOpen.index, this.cols);
 
-        console.log(pos)
+
+        // if(tileToOpen.isOpened) return;
+        // this.decrementUsed(index);
 
         if (numFlagged === tileToOpen.numBombs) {
             for (var i = -1; i <= 1; i++) {
@@ -190,14 +196,12 @@ class MinesweeperGame {
                     // var row = pos.y + j;
 
                     var coords = { x: pos.x + i, y: pos.y + j };
-                    console.log(coords);
                     if (coords.x < 0 || coords.x >= this.cols) continue;
                     if (coords.y < 0 || coords.y >= this.rows) continue;
                     var index = this.posToArrIndex(coords, this.cols);
                     // var index = i * this.cols + tileToOpen.index + j;
-                    // var tile = this.board[index];
+                    // var tile = thiopenNeighborss.board[index];
                     // console.log(tile);
-                    console.log(index);
                     if (this.indexWithinBounds(index)) {
                         var tile = this.board[index];
                         console.log(tile);
@@ -213,6 +217,14 @@ class MinesweeperGame {
         console.log(tileToOpen);
     }
 
+    decrementUsed(index) {
+        if (!this.opened.has(index))
+            this.remaining--;
+        this.opened.add(index);
+        if (this.opened.size == this.nonBombs)
+            alert("WIN!");
+    }
+
     openNonBombNeighbors(tileToOpen) {
         if (tileToOpen.type === "bomb") {
             alert("loss!");
@@ -222,6 +234,9 @@ class MinesweeperGame {
         // console.log(tileToOpen.index);
         if (tileToOpen.isOpened) return;
         this.board[tileToOpen.index].isOpened = true;
+
+        this.decrementUsed(tileToOpen.index);
+
         if (tileToOpen.numBombs && tileToOpen.numBombs > 0) return;
         for (var i = -1; i <= 1; i++) {
             for (var j = -1; j <= 1; j++) {

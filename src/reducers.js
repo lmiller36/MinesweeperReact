@@ -17,6 +17,8 @@ export const data = (state = initialState, action) => {
             const { game } = payload;
             const board = game.board;
 
+            console.log(game);
+
             return {
                 ...state,
                 game: game,
@@ -33,7 +35,7 @@ export const data = (state = initialState, action) => {
 
         case UPDATE_BOARD: {
             const { game } = payload;
-          
+
             return {
                 ...state,
                 shouldRerender: state.shouldRerender + 1,
