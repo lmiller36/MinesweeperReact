@@ -91,12 +91,12 @@ const Tile = ({ tile, gameMode, click }) => {
                 click(tile);
             }
         } /> :
-            <div style={{ position: "relative" }}>
-                <UnopenedTile stlyed={{ position: "absolute" }} gameMode={gameMode} onClick={() => {
-                    click(tile);
-                    // alert("rip")
-                }}></UnopenedTile>
-                <FontAwesomeIcon style={{ display:`${gameMode === "flagging" ? "" : "none"}`, zIndex: "20", position: "absolute", left: "10", top: "10" }} icon={faFlag} />
+            <div style={{ position: "relative" }} onClick={() => {
+                click(tile);
+                // alert("rip")
+            }}>
+                <UnopenedTile stlyed={{ position: "absolute" }} gameMode={gameMode}></UnopenedTile>
+                <FontAwesomeIcon size="2x" style={{ display: `${gameMode === "flagging" ? "" : "none"}`, zIndex: "20", position: "absolute", left: "10", top: "10", opacity: ".6" }} icon={faFlag} />
                 {/* {
                     () => {
                         console.log(gameMode === "flagging")
