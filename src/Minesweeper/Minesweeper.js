@@ -154,6 +154,65 @@ class MinesweeperGame {
         curr.isFlagged = !flaggedState;
     }
 
+    indexWithinBounds(index) {
+        return index >= 0 && index < this.rows * this.cols;
+    }
+
+    isFlagged(index) {
+        return this.board[index].isFlagged;
+    }
+
+    neighborsWithFlags(tile) {
+        var numFlagged = 0;
+        for (var i = -this.cols; i <= this.cols; i += this.cols) {
+            for (var j = -1; j <= 1; j++) {
+                var index = i + tile.index + j;
+
+                if (this.indexWithinBounds(index) && this.isFlagged(index)) {
+                    numFlagged++;
+                }
+            }
+        }
+
+        return numFlagged;
+    }
+
+    openNeighbors(tileToOpen) {
+        var numFlagged = this.neighborsWithFlags(tileToOpen);
+        var pos = this.indexToPos(tileToOpen.index, this.cols);
+
+        console.log(pos)
+
+        if (numFlagged === tileToOpen.numBombs) {
+            for (var i = -1; i <= 1; i++) {
+                for (var j = -1; j <= 1; j++) {
+                    // var col = pos.x + i;
+                    // var row = pos.y + j;
+
+                    var coords = { x: pos.x + i, y: pos.y + j };
+                    console.log(coords);
+                    if (coords.x < 0 || coords.x >= this.cols) continue;
+                    if (coords.y < 0 || coords.y >= this.rows) continue;
+                    var index = this.posToArrIndex(coords, this.cols);
+                    // var index = i * this.cols + tileToOpen.index + j;
+                    // var tile = this.board[index];
+                    // console.log(tile);
+                    console.log(index);
+                    if (this.indexWithinBounds(index)) {
+                        var tile = this.board[index];
+                        console.log(tile);
+                        if (this.isFlagged(index))
+                            continue;
+                        if (tile.isOpened) continue;
+                        this.clickTile(tile);
+                    }
+                }
+            }
+        }
+
+        console.log(tileToOpen);
+    }
+
     openNonBombNeighbors(tileToOpen) {
         var pos = this.indexToPos(tileToOpen.index, this.cols);
         // console.log(tileToOpen.index);

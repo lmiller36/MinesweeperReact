@@ -20,16 +20,16 @@ import { initializeBoard, updateBoard, removeCachedBoard, initializeTimer, updat
 import MinesweeperGame, { genNonBombs } from './Minesweeper/Minesweeper';
 import { isBomb } from './Minesweeper/Tile';
 
-const rows = 10;
-const cols = 10;
-const numBombs = 10;
+const rows = 30;
+const cols = 16;
+const numBombs = 99;
 let stop = false;
 
 let emptyBoard = new MinesweeperGame(rows, cols, 0, null);
 
 const GameWrapper = styled.div`
     display: inline-grid;
-    grid-template-columns: repeat(10,1fr);
+    grid-template-columns: repeat(${cols},1fr);
 `;
 
 const ModeWrapper = styled.div`
@@ -86,7 +86,17 @@ const Game = ({ performInitialSetup, updateBoard, removeCachedBoard, board, game
         updateBoard(game.board);
     };
 
+    const openNeighbors = (tile) => {
+        game.openNeighbors(tile);
+        updateBoard(game.board);
+    }
 
+    function isClicked(tile) {
+        if (tile && tile.isOpened)
+            return true;
+
+        return false;
+    }
 
     var clickFunction = initialTileClick;
 
@@ -125,10 +135,17 @@ const Game = ({ performInitialSetup, updateBoard, removeCachedBoard, board, game
                                 return;
                             }
 
+                            if (isClicked(tile)) {
+                                openNeighbors(tile);
+                                return;
+                            }
+
                             if (gameMode === "flagging") {
                                 flagClick(tile);
                                 return;
                             }
+
+                            if (tile.isFlagged) return;
 
                             if (isBomb(tile)) {
                                 bombClick(tile);
