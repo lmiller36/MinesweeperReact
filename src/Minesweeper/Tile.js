@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { faFlag } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 export const safe = {
@@ -19,10 +21,14 @@ export function isBomb(tile) {
     return tile.type === "bomb";
 }
 
+//,props.gameMode
+
+//props.gameMode === "clicking" ? "" : "flaggingMode"
 const UnopenedTile = styled.div`
-    content: url("https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Minesweeper_unopened_square.svg/1024px-Minesweeper_unopened_square.svg.png");
+    content: url(${props => (getUrl(""))});
     width: 50px;
     height: 50px;
+    z-index:-1;
 `;
 
 const FlaggedTile = styled.div`
@@ -32,13 +38,14 @@ const FlaggedTile = styled.div`
 `;
 
 const OpenedTile = styled.div`
-    content: url(${props => (getUrl(props.neighbors))});
+    content: url(${props => (getUrl(props.neighbors, props.gameMode))});
     width: 50px;
     height: 50px;
 `;
 
+
 //"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Minesweeper_2.svg/2000px-Minesweeper_2.svg.png"
-function getUrl(neighbors) {
+function getUrl(neighbors, gameMode) {
     switch (neighbors) {
         case "bomb":
             return "https://apprecs.org/ios/images/app-icons/256/e7/451931111.jpg";
@@ -62,12 +69,15 @@ function getUrl(neighbors) {
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Minesweeper_8.svg/2000px-Minesweeper_8.svg.png";
         case "flagged":
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Minesweeper_flag.svg/2000px-Minesweeper_flag.svg.png";
+        // case "flaggingMode":
+        //     return "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Minesweeper_flag_generic.svg/2000px-Minesweeper_flag_generic.svg.png";
         default:
             return "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Minesweeper_unopened_square.svg/1024px-Minesweeper_unopened_square.svg.png";
     }
 }
 
-const Tile = ({ tile, click }) => {
+const Tile = ({ tile, gameMode, click }) => {
+    console.log(gameMode);
     return tile.isOpened ? <OpenedTile
         neighbors={tile.numBombs}
         onClick={() => {
@@ -81,10 +91,28 @@ const Tile = ({ tile, click }) => {
                 click(tile);
             }
         } /> :
-            <UnopenedTile onClick={() => {
-                click(tile);
-                // alert("rip")
-            }}></UnopenedTile>;
+            <div style={{ position: "relative" }}>
+                <UnopenedTile stlyed={{ position: "absolute" }} gameMode={gameMode} onClick={() => {
+                    click(tile);
+                    // alert("rip")
+                }}></UnopenedTile>
+                <FontAwesomeIcon style={{ display:`${gameMode === "flagging" ? "" : "none"}`, zIndex: "20", position: "absolute", left: "10", top: "10" }} icon={faFlag} />
+                {/* {
+                    () => {
+                        console.log(gameMode === "flagging")
+                        return gameMode === "flagging" ?
+                            <FontAwesomeIcon style={{ zIndex: "20", position: "absolute", left: "10", top: "10" }} icon={faFlag} />
+                            : <div />
+                    }
+                } */}
+            </div >
+
+    // <UnopenedTile gameMode={gameMode} onClick={() => {
+    //     click(tile);
+    //     // alert("rip")
+    // }}>
+    //     <FontAwesomeIcon icon={faFlag} />
+    // </UnopenedTile>;
 };
 
 export default Tile;

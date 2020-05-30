@@ -234,12 +234,12 @@ const Game = ({ performInitialSetup, updateBoard, removeCachedBoard, board, game
 
                 // console.log(document.getElementsByTagName('input'))
                 stop = true;
-            }}/>
+            }} />
         </Header>
         <GameWrapper>
             {
                 visibleBoard.map((tile) => {
-                    return <Tile tile={tile} click={
+                    return <Tile tile={tile} gameMode={gameMode} click={
                         (tile) => {
                             if (!isSet) {
                                 initialTileClick(tile);
