@@ -42,13 +42,9 @@ export const HardDifficulty = {
     numBombs: 99,
 };
 
-// const StatusBarWrapper = styled.div``;
-
 const StatusBar = (
     props,
 ) => {
-
-    console.log(props);
 
     return <StatusBarWrapper>
         <Timer />

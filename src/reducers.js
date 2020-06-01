@@ -21,8 +21,6 @@ export const data = (state = initialState, action) => {
             const { game } = payload;
             const board = game.board;
 
-            console.log(game);
-
             return {
                 ...state,
                 game: game,
@@ -91,7 +89,6 @@ export const data = (state = initialState, action) => {
         }
         case SET_GAME_DIFFICULTY: {
             const { difficulty } = payload;
-            console.log(difficulty);
             return {
                 ...state,
                 difficulty: difficulty,

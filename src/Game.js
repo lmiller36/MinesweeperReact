@@ -16,7 +16,7 @@ import {
 import { initializeBoard, updateBoard, removeCachedBoard, initializeTimer, updateTimer, toggleGameMode, setGameDifficulty } from './actions';
 
 import MinesweeperGame from './Minesweeper/Minesweeper';
-import { isBomb } from './Minesweeper/Tile';
+// import { isBomb } from './Minesweeper/Tile';
 import './Game.css';
 import { EasyDifficulty } from './StatusBar';
 
@@ -30,28 +30,19 @@ const Game = ({
     // state
     board, game, isSet, gameMode, gameDifficulty,
     // actions
-    performInitialSetup, updateBoard, localRemoveCachedBoard, setDifficulty, setStartTime, updateTimer, toggleGameMode,
+    performInitialSetup, updateBoard, setStartTime, updateTimer, toggleGameMode,
 }) => {
 
-
-    console.log(gameDifficulty);
 
     const GameWrapper = styled.div`
         display: inline-grid;
         grid-template-columns: repeat(${gameDifficulty.cols},1fr);
     `;
 
-    console.log({
-        ...gameDifficulty,
-        numBombs: 0,
-    });
-
     emptyBoard = new MinesweeperGame({
         ...gameDifficulty,
         numBombs: 0,
     }, null);
-
-    console.log(emptyBoard);
 
     if (first && isSet) {
         window.addEventListener('keydown', (event) => {
@@ -65,9 +56,7 @@ const Game = ({
 
 
     const initialTileClick = (tile) => {
-
         stop = false;
-        console.log(gameDifficulty);
         const newGame = new MinesweeperGame(gameDifficulty, tile.index);
         performInitialSetup(newGame);
         const timerInterval = setInterval(() => {
@@ -135,7 +124,7 @@ const Game = ({
                                 if (tile.isFlagged) {
                                     return;
                                 }
-                                if (isBomb(tile)) {
+                                if (tile.type === 'bomb') {
                                     bombClick(tile);
                                     return;
                                 }
