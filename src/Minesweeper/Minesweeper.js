@@ -7,11 +7,12 @@ class MinesweeperGame {
         this.rows = rows;
         this.cols = cols;
         this.bombs = bombs;
-        this.nonBombs = rows * cols - bombs;
-        this.remaining = rows * cols - bombs;
+        this.nonBombs = (rows * cols) - bombs;
+        this.remaining = (rows * cols) - bombs;
         this.opened = new Set();
-        if (this.bombs === 0)
+        if (this.bombs === 0) {
             this.board = this.createEmptyBoard(rows, cols);
+        }
         else {
             this.board = this.createBoard(rows, cols, bombs, initialClick);
             this.clickTile(this.board[initialClick]);
@@ -27,10 +28,7 @@ class MinesweeperGame {
         const pos = this.indexToPos(initialClick, cols);
         const totalTiles = rows * cols;
         const bombs = genBombs(numBombs);
-        const safeTile2 = {
-            ...safeTile,
-            numBombs: 0
-        }
+
         let numSafe = 9;
 
         if (this.isCorner(pos, rows, cols)) numSafe = 4;
@@ -77,25 +75,26 @@ class MinesweeperGame {
 
         this.calculateBombNumberForEachTile(finishedBoard, rows, cols);
 
-        return [].concat(...finishedBoard);;
+        return [].concat(...finishedBoard);
     }
 
     calculateBombNumberForEachTile(finishedBoard, rows, cols) {
         for (var row = 0; row < rows; row++) {
             for (var col = 0; col < cols; col++) {
 
-                if (!isBomb(finishedBoard[row][col])) continue;
+                if (!isBomb(finishedBoard[row][col])){
+                    continue;
+                }
 
 
 
-                for (var i = -1; i <= 1; i++) {
-                    for (var j = -1; j <= 1; j++) {
-                        var coords = { x: col + i, y: row + j };
+                for (var xDelta = -1; xDelta <= 1; xDelta++) {
+                    for (var yDelta = -1; yDelta <= 1; yDelta++) {
+                        var coords = { x: col + xDelta, y: row + yDelta };
                         if (coords.x < 0 || coords.x >= cols) continue;
                         if (coords.y < 0 || coords.y >= rows) continue;
 
                         finishedBoard[coords.y][coords.x].numBombs += 1;
-
                     }
                 }
             }
@@ -108,7 +107,7 @@ class MinesweeperGame {
     }
 
     isCorner(pos, rows, cols) {
-        return this.numEdgesOfPos(pos, rows, cols) == 2;
+        return this.numEdgesOfPos(pos, rows, cols) === 2;
     }
 
     numEdgesOfPos(pos, rows, cols) {
@@ -138,23 +137,16 @@ class MinesweeperGame {
     }
 
     setupGame(initialClick) {
-        // console.log(initialClick);
-        // board = 
         return createBoard(10, 10, 15, indexToPos(initialClick));
     }
 
-
     clickTile(tile) {
-        // console.log("here")
-        // console.log(tile);
-        // console.log("CLICKIN!")
         this.openNonBombNeighbors(tile);
-        // console.log(this.board[tileToOpen.index])
     }
 
     flagTile(tile) {
-        var curr = this.board[tile.index];
-        var flaggedState = curr.isFlagged;
+        const curr = this.board[tile.index];
+        const flaggedState = curr.isFlagged;
         curr.isFlagged = !flaggedState;
     }
 
@@ -185,23 +177,14 @@ class MinesweeperGame {
         var numFlagged = this.neighborsWithFlags(tileToOpen);
         var pos = this.indexToPos(tileToOpen.index, this.cols);
 
-
-        // if(tileToOpen.isOpened) return;
-        // this.decrementUsed(index);
-
         if (numFlagged === tileToOpen.numBombs) {
             for (var i = -1; i <= 1; i++) {
                 for (var j = -1; j <= 1; j++) {
-                    // var col = pos.x + i;
-                    // var row = pos.y + j;
-
                     var coords = { x: pos.x + i, y: pos.y + j };
                     if (coords.x < 0 || coords.x >= this.cols) continue;
                     if (coords.y < 0 || coords.y >= this.rows) continue;
                     var index = this.posToArrIndex(coords, this.cols);
-                    // var index = i * this.cols + tileToOpen.index + j;
-                    // var tile = thiopenNeighborss.board[index];
-                    // console.log(tile);
+
                     if (this.indexWithinBounds(index)) {
                         var tile = this.board[index];
                         console.log(tile);
@@ -218,21 +201,25 @@ class MinesweeperGame {
     }
 
     decrementUsed(index) {
-        if (!this.opened.has(index))
+        if (!this.opened.has(index)) {
             this.remaining--;
+        }
         this.opened.add(index);
-        if (this.opened.size == this.nonBombs)
-            alert("WIN!");
+        if (this.opened.size === this.nonBombs) {
+            alert('WIN!');
+        }
     }
 
     openNonBombNeighbors(tileToOpen) {
-        if (tileToOpen.type === "bomb") {
-            alert("loss!");
+        if (tileToOpen.type === 'bomb') {
+            alert('loss!');
             return;
         }
         var pos = this.indexToPos(tileToOpen.index, this.cols);
         // console.log(tileToOpen.index);
-        if (tileToOpen.isOpened) return;
+        if (tileToOpen.isOpened) {
+            return;
+        }
         this.board[tileToOpen.index].isOpened = true;
 
         this.decrementUsed(tileToOpen.index);
@@ -259,10 +246,10 @@ function genNonBombs(numTiles, includeIndex, toInsert) {
     const tiles = [];
 
 
-    for (var i = 0; i < numTiles; i++) {
+    for (let count = 0; count < numTiles; count++) {
         tiles.push({
             ...toInsert,
-            index: i,
+            index: count,
         });
     }
 
@@ -272,7 +259,7 @@ function genNonBombs(numTiles, includeIndex, toInsert) {
 function genBombs(numBombs) {
     const bombs = [];
 
-    for (var i = 0; i < numBombs; i++) {
+    for (let count = 0; count < numBombs; count++) {
         bombs.push(bombTile);
     }
 

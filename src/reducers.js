@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {
     INITIALIZE_BOARD,
     REMOVE_CACHED_BOARD,
@@ -5,7 +6,10 @@ import {
     INITILIZE_TIMER,
     UPDATE_TIMER,
     TOGGLE_GAME_MODE,
+    SET_GAME_DIFFICULTY
 } from './actions';
+
+import { EasyDifficulty } from './StatusBar';
 
 const initialState = { game: { board: [], isSet: false } };
 
@@ -28,7 +32,7 @@ export const data = (state = initialState, action) => {
                 shouldRerender: 0,
                 now: null,
                 startTime: null,
-                gameMode: "clicking",
+                gameMode: 'clicking',
                 timerInterval: null,
             };
         }
@@ -40,7 +44,7 @@ export const data = (state = initialState, action) => {
                 ...state,
                 shouldRerender: state.shouldRerender + 1,
                 board: game,
-            }
+            };
         }
 
         case INITILIZE_TIMER: {
@@ -51,7 +55,7 @@ export const data = (state = initialState, action) => {
                 now: startTime,
                 startTime: startTime,
                 timerInterval: timerInterval,
-            }
+            };
         }
 
         case UPDATE_TIMER: {
@@ -73,20 +77,28 @@ export const data = (state = initialState, action) => {
                 startTime: null,
                 game: {
                     board: []
-                }
+                },
+                difficulty: EasyDifficulty,
             };
         }
         case TOGGLE_GAME_MODE: {
-            const newMode = state.gameMode === "clicking" ? "flagging" : "clicking";
+            const newMode = state.gameMode === 'clicking' ? 'flagging' : 'clicking';
 
-            console.log("toggle")
             return {
                 ...state,
                 gameMode: newMode,
-            }
+            };
+        }
+        case SET_GAME_DIFFICULTY: {
+            const { difficulty } = payload;
+            console.log(difficulty);
+            return {
+                ...state,
+                difficulty: difficulty,
+            };
         }
         default: {
             return state;
         }
     }
-}
+};

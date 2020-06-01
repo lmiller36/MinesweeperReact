@@ -1,13 +1,14 @@
+/* eslint-disable no-undef */
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import Game from './Game';
+import GameDisplay from './GameDisplay';
 
 import './App.css';
 
 const App = () => (
     <div className="App-Wrapper">
         <div className="App">
-            <Game />
+            <GameDisplay />
         </div>
     </div>
 );

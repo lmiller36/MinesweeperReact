@@ -35,11 +35,8 @@ export const toggleGameMode = (now) => ({
     payload: {now},
 });
 
-
-
-
-// export const INITIAL_CLICK = 'INITIAL_CLICK';
-// export const initialClick = (index) => ({
-//     type: INITIAL_CLICK,
-//     payload: { index },
-// });
+export const SET_GAME_DIFFICULTY = 'SET_GAME_DIFFICULTY';
+export const setGameDifficulty = (difficulty) => ({
+    type: SET_GAME_DIFFICULTY,
+    payload: {difficulty},
+});

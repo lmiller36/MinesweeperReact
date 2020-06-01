@@ -1,41 +1,31 @@
-// import { createSelector } from 'reselect';
-
-export const getBoard = state => {
-    // console.log(state);
+export const getBoard = (state) => {
     return state.data.board;
-}
+};
 
-export const plsRerender = state => {
+export const plsRerender = (state) => {
     return state.data.shouldRerender;
-}
+};
 
-export const getGame = state => {
+export const getGame = (state) => {
     return state.data.game;
-}
+};
 
-export const getIsSet = state => {
+export const getIsSet = (state) => {
     return state.data.isSet;
-}
+};
 
-export const getStartTime = state => {
+export const getStartTime = (state) => {
     return state.data.startTime;
-}
+};
 
-export const getCurrentTime = state => {
+export const getCurrentTime = (state) => {
     return state.data.now;
-}
+};
 
-export const getGameMode = state => {
+export const getGameMode = (state) => {
     return state.data.gameMode;
-}
+};
 
-
-// export const getIncompleteTodos = createSelector(
-//     getTodos,
-//     (todos) => todos.filter(todo => !todo.isCompleted),
-// );
-
-// export const getCompletedTodos = createSelector(
-//     getTodos,
-//     (todos) => todos.filter(todo => todo.isCompleted),
-// );
+export const getGameDifficulty = (state) => {
+    return state.data.difficulty;
+};
