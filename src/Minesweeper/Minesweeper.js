@@ -1,27 +1,33 @@
+/* eslint-disable complexity */
 import { shuffle } from './utils';
-import { bombTile, safeTile, isBomb } from './Tile';
+
+const bombTile = {
+    type: "bomb",
+};
+
+const safeTile = {
+    type: "safe",
+};
+
+function isBomb(tile) {
+    return tile.type === "bomb";
+}
 
 class MinesweeperGame {
-    constructor(rows, cols, bombs, initialClick) {
-        console.log(`rows:${rows} cols:${cols}`);
+    constructor(gameDifficulty, initialClick) {
+        const { rows, cols, numBombs } = gameDifficulty;
         this.rows = rows;
         this.cols = cols;
-        this.bombs = bombs;
-        this.nonBombs = (rows * cols) - bombs;
-        this.remaining = (rows * cols) - bombs;
+        this.bombs = numBombs;
+        this.nonBombs = (rows * cols) - numBombs;
+        this.remaining = (rows * cols) - numBombs;
         this.opened = new Set();
         if (this.bombs === 0) {
-            this.board = this.createEmptyBoard(rows, cols);
-        }
-        else {
-            this.board = this.createBoard(rows, cols, bombs, initialClick);
+            this.board = genNonBombs(rows * cols);
+        } else {
+            this.board = this.createBoard(rows, cols, numBombs, initialClick);
             this.clickTile(this.board[initialClick]);
         }
-    }
-
-    createEmptyBoard(rows, cols) {
-        var x = genNonBombs(rows * cols);
-        return x;
     }
 
     createBoard(rows, cols, numBombs, initialClick) {
@@ -69,7 +75,7 @@ class MinesweeperGame {
                     ...finishedBoard[row][col],
                     index: this.posToArrIndex({ x: col, y: row }, cols),
                     numBombs: 0,
-                }
+                };
             }
         }
 
@@ -82,7 +88,7 @@ class MinesweeperGame {
         for (var row = 0; row < rows; row++) {
             for (var col = 0; col < cols; col++) {
 
-                if (!isBomb(finishedBoard[row][col])){
+                if (!isBomb(finishedBoard[row][col])) {
                     continue;
                 }
 

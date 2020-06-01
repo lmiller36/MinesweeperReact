@@ -6,9 +6,7 @@ import { faMousePointer, faFlag, faCog, faTimes, faRedo } from '@fortawesome/fre
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     getBoard,
-    getIsSet,
     getGame,
-    plsRerender,
     getGameMode,
 
 } from './selectors';
@@ -119,13 +117,9 @@ const StatusBar = (
 
             if (selectedValue === 'medium') {
                 gameDifficulty = MediumDifficulty;
-            }
-            else if (selectedValue === 'hard') {
+            } else if (selectedValue === 'hard') {
                 gameDifficulty = HardDifficulty;
             }
-
-            console.log(gameDifficulty);
-            console.log(props.setGameDifficulty);
 
             props.setGameDifficulty(gameDifficulty);
 

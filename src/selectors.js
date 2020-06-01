@@ -27,5 +27,6 @@ export const getGameMode = (state) => {
 };
 
 export const getGameDifficulty = (state) => {
+    console.log(state);
     return state.data.difficulty;
 };

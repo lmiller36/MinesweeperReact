@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable complexity */
 import React from 'react';
 import Tile from './Minesweeper/Tile';
@@ -17,6 +18,7 @@ import { initializeBoard, updateBoard, removeCachedBoard, initializeTimer, updat
 import MinesweeperGame from './Minesweeper/Minesweeper';
 import { isBomb } from './Minesweeper/Tile';
 import './Game.css';
+import { EasyDifficulty } from './StatusBar';
 
 let stop = false;
 let emptyBoard = null;
@@ -26,17 +28,30 @@ const secondInMilli = 1000;
 
 const Game = ({
     // state
-    board, game, isSet, gameMode,
+    board, game, isSet, gameMode, gameDifficulty,
     // actions
-    performInitialSetup, updateBoard, localRemoveCachedBoard, setDifficulty, setStartTime, updateTimer, toggleGameMode, gameDifficulty
+    performInitialSetup, updateBoard, localRemoveCachedBoard, setDifficulty, setStartTime, updateTimer, toggleGameMode,
 }) => {
+
+
+    console.log(gameDifficulty);
 
     const GameWrapper = styled.div`
         display: inline-grid;
         grid-template-columns: repeat(${gameDifficulty.cols},1fr);
     `;
 
-    emptyBoard = new MinesweeperGame(gameDifficulty.rows, gameDifficulty.cols, 0, null);
+    console.log({
+        ...gameDifficulty,
+        numBombs: 0,
+    });
+
+    emptyBoard = new MinesweeperGame({
+        ...gameDifficulty,
+        numBombs: 0,
+    }, null);
+
+    console.log(emptyBoard);
 
     if (first && isSet) {
         window.addEventListener('keydown', (event) => {
@@ -53,7 +68,7 @@ const Game = ({
 
         stop = false;
         console.log(gameDifficulty);
-        const newGame = new MinesweeperGame(gameDifficulty.rows, gameDifficulty.cols, gameDifficulty.numBombs, tile.index);
+        const newGame = new MinesweeperGame(gameDifficulty, tile.index);
         performInitialSetup(newGame);
         const timerInterval = setInterval(() => {
             updateTimer(new Date());
@@ -155,4 +170,5 @@ const mapDispatchToProps = (dispatch) => ({
     setDifficulty: (newDifficulty) => dispatch(setGameDifficulty(newDifficulty)),
 });
 
-export default connect(mapStateToProps,mapDispatchToProps)(Game);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);

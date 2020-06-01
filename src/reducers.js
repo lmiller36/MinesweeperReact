@@ -11,7 +11,7 @@ import {
 
 import { EasyDifficulty } from './StatusBar';
 
-const initialState = { game: { board: [], isSet: false } };
+const initialState = { difficulty: EasyDifficulty, game: { board: [], isSet: false } };
 
 export const data = (state = initialState, action) => {
     const { type, payload } = action;
