@@ -219,7 +219,6 @@ class MinesweeperGame {
             return;
         }
         const pos = this.indexToPos(tileToOpen.index, this.cols);
-        // console.log(tileToOpen.index);
         if (tileToOpen.isOpened) {
             return;
         }

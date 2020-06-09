@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-export const BOMBTILE = 'https://apprecs.org/ios/images/app-icons/256/e7/451931111.jpg';
+export const BOMB_TILE = 'https://apprecs.org/ios/images/app-icons/256/e7/451931111.jpg';
 export const HINT_TILES = [
     'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Minesweeper_0.svg/2000px-Minesweeper_0.svg.png',
     'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Minesweeper_1.svg/2000px-Minesweeper_1.svg.png',
