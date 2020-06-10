@@ -13,7 +13,6 @@
   "homepage": "https://lmiller36.github.io/MinesweeperReact",
   "author": "Lorne Miller",
   "license": "ISC",
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "devDependencies": {
     "@babel/cli": "^7.8.3",
     "@babel/core": "^7.8.3",
